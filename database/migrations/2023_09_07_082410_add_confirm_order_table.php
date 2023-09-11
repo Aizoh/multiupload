@@ -15,11 +15,10 @@ return new class extends Migration
         Schema::create('confirm_order', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->email('user_email');
+            $table->string('user_email');
             $table->timestamps();
             $table->string('description');
-            $table->enum('status', ['confirmed', 'pending', 'unconfirmed']); // Use enum for a set of predefined values
-           
+            $table->enum('status', ['confirmed', 'pending', 'unconfirmed'])->default('pending');
         });
     }
 

@@ -10,8 +10,10 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
+use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Message;
 
-class ConfirmOrder extends Mailable implements ShouldQueue
+class Confirm extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -47,7 +49,8 @@ class ConfirmOrder extends Mailable implements ShouldQueue
             // text: [
             //     'X-Custom-Header' => 'Custom Value',
             // ],
-            messageId: '$this->confirmorder->order_status',
+            //messageId: '$this->confirmorder->order_status',
+            messageId: 'user@example.com',
             references: ['previous-message@example.com'],
             text: [
                 'X-Custom-Header' => 'Custom Value',
