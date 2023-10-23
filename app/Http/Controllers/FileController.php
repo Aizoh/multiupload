@@ -40,8 +40,14 @@ class FileController extends Controller
             foreach($request->file('files') as $key => $file)
             {
                 $fileName = time().rand(1,99).'.'.$file->extension();  
-                $file->move(public_path('uploads'), $fileName);
-                $files[]['name'] = $fileName;
+                //return(public_path('storage/uploads'));
+                $file->move(public_path('storage/uploads'), $fileName);
+                $description = $request->description; // Set the description for each file
+
+                $files[] = [
+                    'name' => $fileName,
+                    'description' => $description,
+                ];
             }
         }
   
@@ -85,5 +91,9 @@ class FileController extends Controller
     public function destroy(File $file)
     {
         //
+    }
+    public function showmyfiles(){
+        $files = File::all();
+        return view('showfiles', compact('files'));
     }
 }

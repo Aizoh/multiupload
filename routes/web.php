@@ -38,4 +38,5 @@ Route::get('/preview', function () {
 Route::controller(FileController::class)->group(function(){
     Route::get('file-upload', 'index')->name('file.index');
     Route::post('file-upload', 'store')->name('file.store');
+    Route::get('myfiles', 'showmyfiles')->name('file.myfile');
 });

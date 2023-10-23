@@ -20,11 +20,14 @@ class Confirm extends Mailable implements ShouldQueue
     /**
      * Create a new message instance.
      * accessing to the view  by declaring public properties
+     * 
      */
+
+    public $confrirmorder;
     public function __construct(public ConfirmOrder $confirmorder,)
     {
         //
-        
+        $this-> confirmorder =$confirmorder;
     }
 
     /**

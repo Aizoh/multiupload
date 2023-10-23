@@ -33,6 +33,11 @@
                     id="inputFile"
                     multiple 
                     class="form-control @error('files') is-invalid @enderror">
+                <br>
+                <label class="form-label" for="description">Description</label>
+                <textarea rows = "10" cols = "80" id = "description" name="description" placeholder="Enter description...">
+                    
+                </textarea>
   
                 @error('files')
                     <span class="text-danger">{{ $message }}</span>
@@ -49,5 +54,13 @@
     </div>
 </div>
 </body>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#description'))
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
     
 </html>              
