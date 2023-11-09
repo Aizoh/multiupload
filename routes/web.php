@@ -3,6 +3,9 @@
 use App\Http\Controllers\ConfirmOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,3 +43,19 @@ Route::controller(FileController::class)->group(function(){
     Route::post('file-upload', 'store')->name('file.store');
     Route::get('myfiles', 'showmyfiles')->name('file.myfile');
 });
+
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/users', [UserController::class, 'index'])->name('users')->middleware('auth');
+Route::put('/users/{user}/assign-roles',  [UserController::class, 'assignRoles'])->name('assign-roles');
+
+
+// routes/web.php
+
+Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+
+
+Auth::routes();

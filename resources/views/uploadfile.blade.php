@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Multiple File Uploads</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-      
-<body>
+@extends('layouts.app')
+@section('content')
 <div class="container">
        
     <div class="panel panel-primary">
   
       <div class="panel-heading">
-        <h2>Laravel Multiple File Upload</h2>
+        <h2>My Multiple File Upload</h2>
       </div>
   
       <div class="panel-body">
@@ -53,7 +47,7 @@
       </div>
     </div>
 </div>
-</body>
+
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
         <script>
             ClassicEditor
@@ -63,4 +57,4 @@
                 });
         </script>
     
-</html>              
+@endsection
