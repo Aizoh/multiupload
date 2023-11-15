@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class FileController extends Controller
 {
@@ -64,9 +66,25 @@ class FileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(File $file)
+    public function show($id)
     {
         //
+        $file = File::find($id);
+        //dd($file);
+        return view('showfile', compact('file'));
+    }
+
+    public function showfileJson($id)
+    {
+        //
+        $file = File::find($id);
+        //dd($file);
+        $the_file = [
+            'name' => $file->name,
+            'description' => strip_tags($file->description)
+        ];
+        
+        return response()->json($the_file);
     }
 
     /**
@@ -95,5 +113,69 @@ class FileController extends Controller
     public function showmyfiles(){
         $files = File::all();
         return view('showfiles', compact('files'));
+    }
+
+    public function showmyfilesJson(Request $request){
+        $files = File::all();
+        $users = User::all();
+        $my_user = $request->my_user;
+    
+        $formattedFiles = [];
+    
+        foreach ($files as $file) {
+            // Assuming $file is an instance of SplFileInfo, you can access its properties like this
+            $formattedFiles[] = [
+                'name' => $file->name,
+                'description' => strip_tags($file->description),
+                // Add any other properties you want to include
+            ];
+        }
+    
+        $all_users = [];
+    
+        foreach ($users as $user){
+            $all_users[]=[
+                'name' => $user->name,
+                'email'=> $user->email,
+                'password'=> $user->password,
+                // Avoid including sensitive information like passwords in the response
+            ];
+        }
+        $foundUser = collect($all_users)->firstWhere('name', strip_tags($my_user));
+
+        if ($foundUser) {
+            $responseData = [
+                'files' => $formattedFiles,
+                'users' => [$foundUser], // Wrap the user in an array for consistency
+            ];
+        } else {
+            // $responseData = [
+            //     'files' => $formattedFiles,
+            //     'users' => [], // No user found
+            // ];
+            return redirect()->route('user.myuser')->with('error', 'User not found');
+
+        }
+    
+        // Return the combined data as JSON
+        return response()->json($responseData);
+    }
+    
+
+    public function my_request(){
+
+        // $response = Http::get('http://127.0.0.1:84/file/',[
+        //     'id' =>2,
+        // ]);
+
+
+        $response = Http::get('http://127.0.0.1:84/file/2');
+
+        return view('showrequest', compact('response'));
+
+    }
+
+    public function my_user(){
+        return view ('search');
     }
 }

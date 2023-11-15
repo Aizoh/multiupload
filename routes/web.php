@@ -39,9 +39,15 @@ Route::get('/preview', function () {
 //file upload actions
 
 Route::controller(FileController::class)->group(function(){
-    Route::get('file-upload', 'index')->name('file.index');
+    Route::get('file', 'index')->name('file.index');
     Route::post('file-upload', 'store')->name('file.store');
     Route::get('myfiles', 'showmyfiles')->name('file.myfile');
+    Route::post('filesjson', 'showmyfilesJson')->name('files.json');
+    Route::get('file/{id}', 'show')->name('file.file');
+    Route::get('filejson/{id}', 'showfileJson')->name('file.json');
+    Route::get('myrequest', 'my_request')->name('file.myrequest');
+    Route::get('myuser', 'my_user')->name('user.myuser');
+
 });
 
 

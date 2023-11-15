@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Bouncer;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use App\Models\Mo;
 
 class RoleController extends Controller
 {
@@ -13,8 +14,10 @@ class RoleController extends Controller
     public function index()
     {
         //
+        $models = Mo::all();
+        //$models = Mo::get()->toQuery()->paginate();
         $roles = Role::all();
-        return view('roles.index', compact('roles'));
+        return view('roles.index', compact('roles','models'));
     }
 
     /**
