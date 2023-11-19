@@ -7,6 +7,7 @@
       <div class="panel-heading">
         <h2>My Multiple File Upload</h2>
       </div>
+      <a href="{{route('file.myfile')}}">My files</a>
   
       <div class="panel-body">
        

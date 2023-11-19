@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\ConfirmOrderController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
@@ -38,18 +38,18 @@ Route::get('/preview', function () {
 
 //file upload actions
 
-Route::controller(FileController::class)->group(function(){
-    Route::get('file', 'index')->name('file.index');
-    Route::post('file-upload', 'store')->name('file.store');
-    Route::get('myfiles', 'showmyfiles')->name('file.myfile');
-    Route::post('filesjson', 'showmyfilesJson')->name('files.json');
-    Route::get('file/{id}', 'show')->name('file.file');
-    Route::get('filejson/{id}', 'showfileJson')->name('file.json');
-    Route::get('myrequest', 'my_request')->name('file.myrequest');
-    Route::get('myuser', 'my_user')->name('user.myuser');
+// Route::controller(FileController::class)->group(function(){
+//     Route::get('file','index')->name('file.index');
+//     Route::post('file-upload', 'store')->name('file.store');
+//     Route::get('myfiles', 'showmyfiles')->name('file.myfile');
+//     Route::post('filesjson', 'showmyfilesJson')->name('files.json');
+//     Route::get('file/{id}', 'show')->name('file.file');
+//     Route::get('filejson/{id}', 'showfileJson')->name('file.json');
+//     Route::get('myrequest', 'my_request')->name('file.myrequest');
+//     Route::get('myuser', 'my_user')->name('user.myuser');
+   
 
-});
-
+// });
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
@@ -64,4 +64,34 @@ Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.crea
 Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
 
 
+// Define authentication routes using Auth::routes()
 Auth::routes();
+
+// Define other custom routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('file', [FileController::class, 'index'])->name('file.index');
+    Route::post('file-upload', [FileController::class,'store'])->name('file.store');
+    Route::get('myfiles', [FileController::class,'showmyfiles'])->name('file.myfile');
+    Route::post('filesjson', [FileController::class, 'showmyfilesJson'])->name('files.json');
+    Route::get('file/{id}', [FileController::class, 'show'])->name('file.file');
+    Route::get('filejson/{id}',[FileController::class, 'showfileJson'])->name('file.json');
+    Route::get('myrequest', [FileController::class, 'my_request'])->name('file.myrequest');
+    Route::get('myuser', [FileController::class, 'my_user'])->name('user.myuser');
+});
+
+use App\Http\Controllers\ProductController;
+
+
+Route::get('products', [ProductController::class,'index'])->name('products.index');
+  
+Route::get('products/create-step-one', [ProductController::class,'createStepOne'])->name('products.create.step.one');
+
+Route::post('products/create-step-one', [ProductController::class,'postCreateStepOne'])->name('products.create.step.one.post');
+
+Route::get('products/create-step-two', [ProductController::class,'createStepTwo'])->name('products.create.step.two');
+
+Route::post('products/create-step-two', [ProductController::class,'postCreateStepTwo'])->name('products.create.step.two.post');
+
+Route::get('products/create-step-three', [ProductController::class,'createStepThree'])->name('products.create.step.three');
+
+Route::post('products/create-step-three', [ProductController::class,'postCreateStepThree'])->name('products.create.step.three.post');

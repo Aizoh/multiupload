@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use App\Models\User;
+use App\Notifications\FileNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Http;
+use Silber\Bouncer\BouncerFacade as Bouncer;
+use Auth;
+
 
 class FileController extends Controller
 {
@@ -15,6 +20,8 @@ class FileController extends Controller
     public function index()
     {
         //
+        //$notifications = Notification::all();
+        //return view('uploadfile', compact('notifications'));
         return view('uploadfile');
     }
 
@@ -32,6 +39,15 @@ class FileController extends Controller
     public function store(Request $request)
     {
         //
+        dd(Auth::user());
+        $role = Bouncer::role()->where('name', 'super_admin')->first();
+
+        if ($role) {
+            $user = $role->users;
+            // This will give you all users assigned the 'super_admin' role.
+        } else {
+            // Role 'super_admin' not found
+        }
         $request->validate([
             'files' => 'required',
             'files.*' => 'required|mimes:pdf,xlx,csv|max:2048',
@@ -49,13 +65,15 @@ class FileController extends Controller
                 $files[] = [
                     'name' => $fileName,
                     'description' => $description,
+                    'user_id'=>Auth::user()->id,
                 ];
             }
         }
   
         foreach ($files as $key => $file) {
-            File::create($file);
+            $myfile =File::create($file);
         }
+        Notification::send($user, new FileNotification($myfile));
      
         return back()
                 ->with('success','You have successfully upload file.');

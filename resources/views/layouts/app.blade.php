@@ -21,7 +21,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/home') }}">
+                <a class="navbar-brand" href="{{ url('/file') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 @auth
@@ -29,6 +29,36 @@
                         <a class="navbar-brand" href="{{ url('/users') }}">
                             Manage Users
                         </a>
+                        <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Notifications
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            @forelse ( auth()->user()->notifications as $notification )
+                            {{-- {{ $notification }}; --}}
+                                <a href="{{route('file.file', $notification->notifiable_id)}}" class="dropdown-item">{{$notification->data['myfile']['name']}}</a>
+                            @empty
+                                <a class="dropdown-item">No New Notifications/a>
+                            @endforelse
+                        </div>
+                            {{-- <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                    Unread
+                                </a>
+
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                              document.getElementById('logout-form').submit();">
+                                read
+                                </a>
+                               
+                            </div> --}}
+
+                        </li>
+                        </ul>
                     @endif
                 @endauth
                
@@ -90,6 +120,7 @@
 
         <main class="py-4">
             @yield('content')
+            @yield('scripts')
         </main>
     </div>
 </body>
