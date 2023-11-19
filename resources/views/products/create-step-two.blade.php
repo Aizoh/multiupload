@@ -19,12 +19,7 @@
                                     </ul>
                                 </div>
                             @endif
-  
-                            {{-- <div class="form-group">
-                                <label for="description">Product Status</label><br/>
-                                <label class="radio-inline"><input type="radio" name="status" value="1" {{{ (isset($product->status) && $product->status == '1') ? "checked" : "" }}}> Active</label>
-                                <label class="radio-inline"><input type="radio" name="status" value="0" {{{ (isset($product->status) && $product->status == '0') ? "checked" : "" }}}> DeActive</label>
-                            </div> --}}
+
                             <div class="form-group">
                                 <label for="terms">Terms and Conditions</label><br/>
                                 <label class="checkbox-inline">
@@ -32,13 +27,6 @@
                                     I agree to the terms and conditions
                                 </label>
                             </div>
-                            
-  
-                            {{-- <div class="form-group">
-                                <label for="description">Product Stock</label>
-                                <input type="text"  value="{{{ $product->stock ?? '' }}}" class="form-control" id="productAmount" name="stock"/>
-                            </div> --}}
-  
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -58,7 +46,7 @@
     </div>
 </div>
 @endsection
-{{-- @section('scripts')
+@section('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -72,4 +60,4 @@
     });
 </script>
 
-@endsection --}}
+@endsection

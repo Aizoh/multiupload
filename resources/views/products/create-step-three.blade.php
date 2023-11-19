@@ -11,6 +11,8 @@
                     <div class="card-body">
   
                             <table class="table">
+
+                                @foreach ($products as $product )
                                 <tr>
                                     <td>Product Name:</td>
                                     <td><strong>{{$product->name}}</strong></td>
@@ -31,12 +33,14 @@
                                     <td>Product Stock:</td>
                                     <td><strong>{{$product->stock}}</strong></td>
                                 </tr>
+                                @endforeach  
                             </table>
                     </div>
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 <a href="{{ route('products.create.step.two') }}" class="btn btn-danger pull-right">Previous</a>
+                                
                             </div>
                             <div class="col-md-6 text-right">
                                 <button type="submit" class="btn btn-primary">Submit</button>

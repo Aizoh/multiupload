@@ -95,3 +95,4 @@ Route::post('products/create-step-two', [ProductController::class,'postCreateSte
 Route::get('products/create-step-three', [ProductController::class,'createStepThree'])->name('products.create.step.three');
 
 Route::post('products/create-step-three', [ProductController::class,'postCreateStepThree'])->name('products.create.step.three.post');
+

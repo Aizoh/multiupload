@@ -66,88 +66,75 @@ class ProductController extends Controller
         //
     }
 
-    public function createStepOne(Request $request)
+    public function createStepOne()
     {
-        $product = $request->session()->get('product');
-  
-        return view('products.create-step-one',compact('product'));
+        // Initialize an empty array to store products or retrieve existing products from the session
+        $products = session('products', [new Product()]);
+    
+        return view('products.create-step-one', compact('products'));
     }
-  
- 
+    
     public function postCreateStepOne(Request $request)
     {
+        // Validate the incoming form data for multiple products
         $validatedData = $request->validate([
-            'name' => 'required|unique:products',
-            'amount' => 'required|numeric',
-            'description' => 'required',
+            'products.*.name' => 'required|unique:products',
+            'products.*.amount' => 'required|numeric',
+            'products.*.description' => 'required',
         ]);
-  
-        if(empty($request->session()->get('product'))){
-            $product = new Product();
-            $product->fill($validatedData);
-            $request->session()->put('product', $product);
-        }else{
-            $product = $request->session()->get('product');
-            $product->fill($validatedData);
-            $request->session()->put('product', $product);
+    
+        // Create an array of Product instances from the validated data
+        $products = [];
+        foreach ($validatedData['products'] as $productData) {
+            $product = new Product($productData);
+            $products[] = $product;
         }
-  
+    
+        // Store the products array in the session
+        $request->session()->put('products', $products);
+    
         return redirect()->route('products.create.step.two');
     }
 
+    public function createStepTwo(){
+    return view('products.create-step-two');
+}
 
-//     $products[] = $product;
-// }
+public function postCreateStepTwo(Request $request)
+{
+    // Validate that the terms checkbox is checked
+    $request->validate([
+        'terms' => 'accepted', // Add the appropriate validation rule here
+    ], [
+        'terms.accepted' => 'Please accept the terms and conditions',
+    ]);
 
-// You might save the products to the database here or store them in the session for further processing
+    // Redirect to step three if terms are accepted
+    return redirect()->route('products.create.step.three');
+}
+public function createStepThree()
+{
+    // Retrieve the products from the session for display or finalization
+    $products = session('products', [new Product()]);
 
-// For example, if you want to store in the session:
-// $request->session()->put('products', $products);
+    return view('products.create-step-three', compact('products'));
+}
 
-// return redirect()->route('products.create.step.two');
-    
- 
-    public function createStepTwo(Request $request)
-    {
-        $product = $request->session()->get('product');
-  
-        return view('products.create-step-two',compact('product'));
-    }
-  
- 
-    public function postCreateStepTwo(Request $request)
-    {
-        // $validatedData = $request->validate([
-        //     'stock' => 'required',
-        //     'status' => 'required',
-        // ]);
-        if ($request->has('terms')) {
+public function postCreateStepThree(Request $request)
+{
+    // Retrieve the products from the session
+    $products = $request->session()->get('products');
 
-            $product = $request->session()->get('product');
-            // $product->fill($validatedData);
-            $request->session()->put('product', $product);
-      
-            return redirect()->route('products.create.step.three');
-        }else{
-            return redirect()->route('products.create.step.two')->with('error', 'Please accept our terms');
-        }
-
-    }
-  
-    public function createStepThree(Request $request)
-    {
-        $product = $request->session()->get('product');
-  
-        return view('products.create-step-three',compact('product'));
-    }
- 
-    public function postCreateStepThree(Request $request)
-    {
-        $product = $request->session()->get('product');
+    // Save each product to the database or perform any final processing
+    foreach ($products as $product) {
         $product->save();
-  
-        $request->session()->forget('product');
-  
-        return redirect()->route('products.index');
     }
+
+    // Clear the session data after saving
+    $request->session()->forget('products');
+
+    return redirect()->route('products.index');
+}
+
+    
 }
