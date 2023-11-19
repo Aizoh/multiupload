@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -63,18 +62,21 @@
     formCounter++;
 
     let newForm = `
-        <div class="form-group">
-            <label for="title">Product Name:</label>
-            <input type="text" class="form-control" name="products[${formCounter}][name]">
-        </div>
-        <div class="form-group">
-            <label for="description">Product Amount:</label>
-            <input type="text" class="form-control" name="products[${formCounter}][amount]"/>
-        </div>
-        <div class="form-group">
-            <label for="description">Product Description:</label>
-            <textarea class="form-control" name="products[${formCounter}][description]"></textarea>
-        </div>
+    <div class="form-group">
+        <label for="title">Product Name:</label>
+            <input type="text" value="{{ $product->name ?? '' }}" class="form-control" id="taskTitle" name="name">
+            </div>
+            <div class="form-group">
+                <label for="description">Product Amount:</label>
+                <input type="text" value="{{{ $product->amount ?? '' }}}" class="form-control" id="productAmount" name="amount"/>
+            </div>
+   
+            <div class="form-group">
+                <label for="description">Product Description:</label>
+                <textarea type="text" class="form-control" id="taskDescription" name="description">{{{ $product->description ?? '' }}}
+                </textarea>
+            </div>
+    </div>
     `;
 
     $('#dynamicFormsContainer').append(newForm);
@@ -82,5 +84,4 @@
 
     });
 </script>
-
 @endsection

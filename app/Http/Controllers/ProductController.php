@@ -74,26 +74,26 @@ class ProductController extends Controller
     }
   
  
-    // public function postCreateStepOne(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|unique:products',
-    //         'amount' => 'required|numeric',
-    //         'description' => 'required',
-    //     ]);
+    public function postCreateStepOne(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|unique:products',
+            'amount' => 'required|numeric',
+            'description' => 'required',
+        ]);
   
-    //     if(empty($request->session()->get('product'))){
-    //         $product = new Product();
-    //         $product->fill($validatedData);
-    //         $request->session()->put('product', $product);
-    //     }else{
-    //         $product = $request->session()->get('product');
-    //         $product->fill($validatedData);
-    //         $request->session()->put('product', $product);
-    //     }
+        if(empty($request->session()->get('product'))){
+            $product = new Product();
+            $product->fill($validatedData);
+            $request->session()->put('product', $product);
+        }else{
+            $product = $request->session()->get('product');
+            $product->fill($validatedData);
+            $request->session()->put('product', $product);
+        }
   
-    //     return redirect()->route('products.create.step.two');
-    // }
+        return redirect()->route('products.create.step.two');
+    }
 
 
 //     $products[] = $product;
@@ -105,28 +105,6 @@ class ProductController extends Controller
 // $request->session()->put('products', $products);
 
 // return redirect()->route('products.create.step.two');
-public function postCreateStepOne(Request $request)
-{
-    $validatedData = $request->validate([
-        'products.*.name' => 'required|unique:products,name',
-        'products.*.amount' => 'required|numeric',
-        'products.*.description' => 'required',
-    ]);
-
-    // Loop through the submitted products
-    foreach ($validatedData['products'] as $productData) {
-        $product = new Product([
-            'name' => $productData['name'],
-            'amount' => $productData['amount'],
-            'description' => $productData['description'],
-        ]);
-        $products[] = $product;
-        // Process or save the product as needed
-    }
-    $request->session()->put('products', $products);
-    return redirect()->route('products.create.step.two');
-}
-
     
  
     public function createStepTwo(Request $request)
@@ -139,19 +117,23 @@ public function postCreateStepOne(Request $request)
  
     public function postCreateStepTwo(Request $request)
     {
-        $validatedData = $request->validate([
-            'stock' => 'required',
-            'status' => 'required',
-        ]);
-  
-        $product = $request->session()->get('product');
-        $product->fill($validatedData);
-        $request->session()->put('product', $product);
-  
-        return redirect()->route('products.create.step.three');
+        // $validatedData = $request->validate([
+        //     'stock' => 'required',
+        //     'status' => 'required',
+        // ]);
+        if ($request->has('terms')) {
+
+            $product = $request->session()->get('product');
+            // $product->fill($validatedData);
+            $request->session()->put('product', $product);
+      
+            return redirect()->route('products.create.step.three');
+        }else{
+            return redirect()->route('products.create.step.two')->with('error', 'Please accept our terms');
+        }
+
     }
   
-
     public function createStepThree(Request $request)
     {
         $product = $request->session()->get('product');
