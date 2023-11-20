@@ -136,5 +136,23 @@ public function postCreateStepThree(Request $request)
     return redirect()->route('products.index');
 }
 
+public function clearSectionData(Request $request)
+{
+    $sectionId = $request->input('sectionId');
+
+    // Retrieve the products from the session
+    $products = $request->session()->get('products', []);
+
+    // Find and remove the product by ID
+    foreach ($products as $key => $product) {
+        if ($product['id'] === $sectionId) {
+            unset($products[$key]);
+            $request->session()->put('products', $products);
+            return response()->json(['success' => true]);
+        }
+    }
+
+    return response()->json(['success' => false]);
+}
     
 }

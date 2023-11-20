@@ -96,3 +96,6 @@ Route::get('products/create-step-three', [ProductController::class,'createStepTh
 
 Route::post('products/create-step-three', [ProductController::class,'postCreateStepThree'])->name('products.create.step.three.post');
 
+Route::post('/clear-section-data', [ProductController::class, 'clearSectionData']);
+
+

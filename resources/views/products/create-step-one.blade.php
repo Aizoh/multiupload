@@ -23,7 +23,7 @@
   
                             <div id="productsSection">
                                 @foreach ($products as $key => $product)
-                                    <div class="product">
+                                    <div class="product" id="product_${productCounter}">
                                         <h3>Product {{ $key + 1 }}</h3>
                                         <div class="form-group">
                                             <label for="products[{{ $key }}][name]">Product Name:</label>
@@ -37,6 +37,7 @@
                                             <label for="products[{{ $key }}][description]">Product Description:</label>
                                             <textarea class="form-control" id="description_{{ $key }}" name="products[{{ $key }}][description]">{{ $product['description'] ?? '' }}</textarea>
                                         </div>
+                                        <button class="deleteSectionBtn" type="button" data-section-id="${productCounter}">Delete</button>
                                     </div>
                                 @endforeach
                             </div>
@@ -63,7 +64,7 @@
                 productCounter++;
 
                 let newProduct = `
-                <div class="product">
+                <div class="product" id="product_${productCounter}">
                     <h3>Product ${productCounter}</h3>
                     <div class="form-group">
                         <label for="products[${productCounter - 1}][name]">Product Name:</label>
@@ -77,31 +78,65 @@
                         <label for="products[${productCounter - 1}][description]">Product Description:</label>
                         <textarea class="form-control" id="description_${productCounter}" name="products[${productCounter - 1}][description]"></textarea>
                     </div>
+                    <button class="deleteSectionBtn" data-section-id="${productCounter}">Delete</button>
                 </div>`;
 
                 $('#productsSection').append(newProduct);
             });
 
-            // $('#productForm').submit(function(e) {
-            //     e.preventDefault();
-            //     console.log("Form submitted"); 
+            $('.deleteSectionBtn').on('click', function() {
+                let sectionId = $(this).data('section-id');
 
-            //     let formData = $(this).serialize();
+                $.ajax({
+                    url: '/clear-section-data', // Endpoint to handle section data removal
+                    method: 'POST',
+                    data: { sectionId: sectionId },
+                    success: function(response) {
+                        // Handle success response
+                        console.log('Section data deleted successfully.');
+                        // Remove the section from the UI upon successful deletion
+                        $(`#section_${sectionId}`).remove();
+                        $(`#product_${sectionId}`).remove();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        console.error('Error deleting section data:', error);
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteSectionBtn', function() {
+                let sectionId = $(this).data('section-id');
+                $(`#product_${sectionId}`).remove();
+            });
+
+               // Handle delete button click using event delegation
+            $('#productsSection').on('click', '.deleteSectionBtn', function() {
+                let sectionId = $(this).data('section-id');
+                $(`#product_${sectionId}`).remove();
+            });
+
+            // $(document).on('submit', '.deleteProductForm', function(e) {
+            //     e.preventDefault();
+
+            //     let sectionId = $(this).find('input[name="product_id"]').val();
 
             //     $.ajax({
             //         url: $(this).attr('action'),
             //         method: $(this).attr('method'),
-            //         data: formData,
+            //         data: { sectionId: sectionId }, // Send the specific product ID or section ID to the server for deletion
             //         success: function(response) {
-            //             // Handle success response, if needed
-            //             console.log("Ajax success:", response);
+            //             // Handle success response if needed
+            //             console.log('Product deleted successfully.');
+            //             $(`#product_${sectionId}`).remove(); // Remove the section from the UI
             //         },
             //         error: function(xhr, status, error) {
-            //             // Handle error response, if needed
-            //             console.log("Ajax error:", error);
+            //             // Handle error response if needed
+            //             console.error('Error deleting product:', error);
             //         }
             //     });
             // });
+
         });
     </script>
 @endsection
